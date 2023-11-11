@@ -21,11 +21,11 @@ func (api *API) CreateSpaceCraft(ctx *fiber.Ctx) error {
 	req := &request.SpaceShipCreateRequest{}
 	err := json.Unmarshal(ctx.Body(), req)
 	if err != nil {
-		return err
+		return customErrorResponse(ctx, err)
 	}
 	err = api.scUc.Create(ctx.UserContext(), req)
 	if err != nil {
-		return err
+		return customErrorResponse(ctx, err)
 	}
 
 	return ctx.JSON(JsonResponse[any]{Success: true})
@@ -44,11 +44,11 @@ func (api *API) EditSpaceCraft(ctx *fiber.Ctx) error {
 	req := &request.SpaceShipEditRequest{}
 	err := json.Unmarshal(ctx.Body(), req)
 	if err != nil {
-		return err
+		return customErrorResponse(ctx, err)
 	}
 	err = api.scUc.Edit(ctx.UserContext(), req)
 	if err != nil {
-		return err
+		return customErrorResponse(ctx, err)
 	}
 
 	return ctx.JSON(JsonResponse[any]{Success: true})
@@ -67,11 +67,11 @@ func (api *API) GetSpaceCraft(ctx *fiber.Ctx) error {
 	idParam := ctx.Params("id")
 	id, err := strconv.Atoi(idParam)
 	if err != nil {
-		return err
+		return customErrorResponse(ctx, err)
 	}
 	res, err := api.scUc.Get(ctx.UserContext(), id)
 	if err != nil {
-		return err
+		return customErrorResponse(ctx, err)
 	}
 	return ctx.JSON(JsonResponse[response.SpaceCraftResponse]{
 		Data: *res,
@@ -106,11 +106,11 @@ func (api *API) DeleteSpaceCraft(ctx *fiber.Ctx) error {
 	idParam := ctx.Params("id")
 	id, err := strconv.Atoi(idParam)
 	if err != nil {
-		return err
+		return customErrorResponse(ctx, err)
 	}
 	err = api.scUc.Delete(ctx.UserContext(), id)
 	if err != nil {
-		return err
+		return customErrorResponse(ctx, err)
 	}
 	return ctx.JSON(JsonResponse[any]{Success: true})
 }
