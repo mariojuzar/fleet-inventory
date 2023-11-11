@@ -94,10 +94,22 @@ func (api *API) GetSpaceCraft(ctx *fiber.Ctx) error {
 // @Param 		status		query 		string 	false 	"space-craft status"
 // @Param 		class		query 		string 	false 	"space-craft class"
 // @Produce		json
-// @Success		200	{object}	JsonResponse[bool]{}
+// @Success		200	{object}	JsonResponse[[]response.SpaceCraftFetchResponse]{}
 // @Router		/v1/space-craft	[get]
 func (api *API) FetchSpaceCraft(ctx *fiber.Ctx) error {
-	return nil
+	req := &request.SpaceShipFetchRequest{}
+	req.Name = ctx.Query("name")
+	req.Class = ctx.Query("class")
+	req.Status = ctx.Query("status")
+
+	res, err := api.scUc.Fetch(ctx.UserContext(), req)
+	if err != nil {
+		return customErrorResponse(ctx, err)
+	}
+
+	return ctx.JSON(JsonResponse[[]response.SpaceCraftFetchResponse]{
+		Data: res,
+	})
 }
 
 // DeleteSpaceCraft godoc

@@ -2,6 +2,7 @@ package spacecraft
 
 import (
 	"context"
+	"github.com/mariojuzar/fleet-inventory/internal/domain/model"
 	"github.com/mariojuzar/fleet-inventory/internal/usecases/request"
 	"github.com/mariojuzar/fleet-inventory/internal/usecases/response"
 	"github.com/rs/zerolog/log"
@@ -47,8 +48,24 @@ func (m *Module) Get(ctx context.Context, id int) (*response.SpaceCraftResponse,
 }
 
 func (m *Module) Fetch(ctx context.Context, req *request.SpaceShipFetchRequest) ([]response.SpaceCraftFetchResponse, error) {
-	//TODO implement me
-	panic("implement me")
+	data, err := m.spaceCraftRepo.Fetch(ctx, &model.SpaceCraftFetchFilter{
+		Name:   req.Name,
+		Class:  req.Class,
+		Status: req.Status,
+	})
+	if err != nil {
+		return nil, err
+	}
+	resp := make([]response.SpaceCraftFetchResponse, 0)
+	for _, datum := range data {
+		resp = append(resp, response.SpaceCraftFetchResponse{
+			Id:     datum.Id,
+			Name:   datum.Name,
+			Status: datum.Status,
+			Class:  datum.Class,
+		})
+	}
+	return resp, err
 }
 
 func (m *Module) Delete(ctx context.Context, id int) error {

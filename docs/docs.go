@@ -76,7 +76,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/controller.JsonResponse-bool"
+                            "$ref": "#/definitions/controller.JsonResponse-array_response_SpaceCraftFetchResponse"
                         }
                     }
                 }
@@ -228,6 +228,29 @@ const docTemplate = `{
                 }
             }
         },
+        "controller.JsonResponse-array_response_SpaceCraftFetchResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/response.SpaceCraftFetchResponse"
+                    }
+                },
+                "error": {
+                    "$ref": "#/definitions/controller.ErrorResponse"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
         "controller.JsonResponse-bool": {
             "type": "object",
             "properties": {
@@ -338,6 +361,23 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.SpaceCraftFetchResponse": {
+            "type": "object",
+            "properties": {
+                "class": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "status": {
                     "type": "string"
                 }
             }

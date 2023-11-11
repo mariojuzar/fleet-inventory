@@ -172,6 +172,29 @@ func (repo *SpaceCraftRepository) Delete(ctx context.Context, id int) error {
 }
 
 func (repo *SpaceCraftRepository) Fetch(ctx context.Context, filter *model.SpaceCraftFetchFilter) ([]model.SpaceCraft, error) {
-	//TODO implement me
-	panic("implement me")
+	var args []any
+	query := `SELECT sc.id as id, sc.name name, sc.class as class, sc.crew as crew, sc.image as image, sc.value as value, sc.status as status, sc.created_at as created_at, sc.updated_at as updated_at 
+			  FROM space_crafts sc
+			  WHERE sc.is_deleted = false `
+
+	if filter.Name != "" {
+		query += ` AND sc.name LIKE ? `
+		args = append(args, filter.Name)
+	}
+	if filter.Status != "" {
+		query += ` AND sc.status = ? `
+		args = append(args, filter.Status)
+	}
+	if filter.Class != "" {
+		query += ` AND sc.class = ? `
+		args = append(args, filter.Class)
+	}
+
+	var result []model.SpaceCraft
+	err := repo.DB.Conn.SelectContext(ctx, &result, query, args...)
+	if err != nil {
+		log.Err(err).Msg("Failed to fetch space craft")
+		return nil, err
+	}
+	return result, err
 }

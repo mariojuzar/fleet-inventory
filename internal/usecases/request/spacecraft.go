@@ -30,6 +30,9 @@ type SpaceShipEditRequest struct {
 }
 
 type SpaceShipFetchRequest struct {
+	Name   string `json:"-"`
+	Class  string `json:"-"`
+	Status string `json:"-"`
 }
 
 func (c *SpaceShipCreateRequest) ToModel() *model.SpaceCraft {

@@ -7,6 +7,21 @@ definitions:
       error_message:
         type: string
     type: object
+  controller.JsonResponse-array_response_SpaceCraftFetchResponse:
+    properties:
+      code:
+        type: integer
+      data:
+        items:
+          $ref: '#/definitions/response.SpaceCraftFetchResponse'
+        type: array
+      error:
+        $ref: '#/definitions/controller.ErrorResponse'
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
   controller.JsonResponse-bool:
     properties:
       code:
@@ -81,6 +96,17 @@ definitions:
       title:
         type: string
     type: object
+  response.SpaceCraftFetchResponse:
+    properties:
+      class:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      status:
+        type: string
+    type: object
   response.SpaceCraftResponse:
     properties:
       armament:
@@ -147,7 +173,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controller.JsonResponse-bool'
+            $ref: '#/definitions/controller.JsonResponse-array_response_SpaceCraftFetchResponse'
       summary: FetchSpaceCraft
       tags:
       - space-craft

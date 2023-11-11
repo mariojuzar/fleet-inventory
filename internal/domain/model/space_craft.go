@@ -28,4 +28,7 @@ type SpaceCraftUpdate struct {
 }
 
 type SpaceCraftFetchFilter struct {
+	Name   string
+	Class  string
+	Status string
 }

@@ -19,6 +19,10 @@ type SpaceCraftArmamentResponse struct {
 }
 
 type SpaceCraftFetchResponse struct {
+	Id     int    `json:"id,omitempty"`
+	Name   string `json:"name,omitempty"`
+	Status string `json:"status,omitempty"`
+	Class  string `json:"class,omitempty"`
 }
 
 func (s *SpaceCraftResponse) FromModel(m *model.SpaceCraft) {
