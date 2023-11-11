@@ -40,6 +40,10 @@ func (m *Module) Fetch(ctx context.Context, req *request.SpaceShipFetchRequest) 
 }
 
 func (m *Module) Delete(ctx context.Context, id int) error {
-	//TODO implement me
-	panic("implement me")
+	err := m.spaceCraftRepo.Delete(ctx, id)
+	if err != nil {
+		log.Err(err).Msg("Failed to delete space craft")
+		return err
+	}
+	return nil
 }

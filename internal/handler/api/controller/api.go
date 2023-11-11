@@ -54,7 +54,7 @@ func (api *API) RegisterRoute() *fiber.App {
 	spaceCraft.Put("/", api.EditSpaceCraft)
 	spaceCraft.Get("/:id", api.GetSpaceCraft)
 	spaceCraft.Get("/", api.FetchSpaceCraft)
-	spaceCraft.Delete("/", api.DeleteSpaceCraft)
+	spaceCraft.Delete("/:id", api.DeleteSpaceCraft)
 
 	return app
 }

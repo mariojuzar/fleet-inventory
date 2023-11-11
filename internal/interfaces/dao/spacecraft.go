@@ -82,7 +82,7 @@ func (repo *SpaceCraftRepository) Update(ctx context.Context, model *model.Space
 func (repo *SpaceCraftRepository) Get(ctx context.Context, id int) (*model.SpaceCraft, error) {
 	query := `SELECT sc.id as id, sc.name name, sc.class as class, sc.crew as crew, sc.image as image, sc.value as value, sc.status as status, sc.created_at as created_at, sc.updated_at as updated_at 
 			  FROM space_crafts sc
-			  WHERE sc.id = ?`
+			  WHERE sc.id = ? and sc.is_deleted = false`
 
 	result := &model.SpaceCraft{}
 	err := repo.DB.Conn.GetContext(ctx, result, query, id)
@@ -93,9 +93,9 @@ func (repo *SpaceCraftRepository) Get(ctx context.Context, id int) (*model.Space
 	var armResult []model.SpaceCraftArmamentEmbed
 	armQuery := `SELECT a.name as title, sca.qty as qty
 				 FROM space_crafts_armaments sca
-				 LEFT JOIN space_crafts sc ON sc.id = sca.space_craft_id
-				 LEFT JOIN armaments a ON a.id = sca.armament_id
-				 WHERE sca.space_craft_id = ?`
+				 LEFT JOIN space_crafts sc ON sc.id = sca.space_craft_id and sc.is_deleted = false
+				 LEFT JOIN armaments a ON a.id = sca.armament_id and a.is_deleted = false
+				 WHERE sca.space_craft_id = ? and sca.is_deleted = false`
 	err = repo.DB.Conn.SelectContext(ctx, &armResult, armQuery, id)
 	if err != nil {
 		return nil, err
@@ -106,8 +106,15 @@ func (repo *SpaceCraftRepository) Get(ctx context.Context, id int) (*model.Space
 }
 
 func (repo *SpaceCraftRepository) Delete(ctx context.Context, id int) error {
-	//TODO implement me
-	panic("implement me")
+	query := `UPDATE space_crafts SET is_deleted = true WHERE id = ?`
+
+	_, err := repo.DB.Conn.ExecContext(ctx, query, id)
+	if err != nil {
+		log.Err(err).Msg("Failed to soft delete space craft")
+		return err
+	}
+
+	return nil
 }
 
 func (repo *SpaceCraftRepository) Fetch(ctx context.Context, filter *model.SpaceCraftFetchFilter) ([]model.SpaceCraft, error) {
