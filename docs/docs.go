@@ -81,38 +81,6 @@ const docTemplate = `{
                     }
                 }
             },
-            "put": {
-                "description": "EditSpaceCraft",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "space-craft"
-                ],
-                "summary": "EditSpaceCraft",
-                "parameters": [
-                    {
-                        "description": "Edit payload",
-                        "name": "space-craft",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/request.SpaceShipEditRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/controller.JsonResponse-bool"
-                        }
-                    }
-                }
-            },
             "post": {
                 "description": "CreateSpaceCraft",
                 "consumes": [
@@ -166,6 +134,45 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controller.JsonResponse-response_SpaceCraftResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "EditSpaceCraft",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "space-craft"
+                ],
+                "summary": "EditSpaceCraft",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "space-craft id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Edit payload",
+                        "name": "space-craft",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.SpaceShipEditRequest"
+                        }
                     }
                 ],
                 "responses": {
@@ -235,6 +242,29 @@ const docTemplate = `{
                 },
                 "message": {
                     "type": "string"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "controller.JsonResponse-response_SpaceCraftResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "$ref": "#/definitions/response.SpaceCraftResponse"
+                },
+                "error": {
+                    "$ref": "#/definitions/controller.ErrorResponse"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "success": {
+                    "type": "boolean"
                 }
             }
         },
@@ -279,7 +309,70 @@ const docTemplate = `{
             }
         },
         "request.SpaceShipEditRequest": {
-            "type": "object"
+            "type": "object",
+            "properties": {
+                "class": {
+                    "type": "string"
+                },
+                "crew": {
+                    "type": "integer"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "number"
+                }
+            }
+        },
+        "response.SpaceCraftArmamentResponse": {
+            "type": "object",
+            "properties": {
+                "qty": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.SpaceCraftResponse": {
+            "type": "object",
+            "properties": {
+                "armament": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/response.SpaceCraftArmamentResponse"
+                    }
+                },
+                "class": {
+                    "type": "string"
+                },
+                "crew": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "valued": {
+                    "type": "number"
+                }
+            }
         }
     }
 }`

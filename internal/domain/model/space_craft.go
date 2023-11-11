@@ -18,5 +18,14 @@ type SpaceCraftArmamentEmbed struct {
 	Quantity   int    `db:"qty"`
 }
 
+type SpaceCraftUpdate struct {
+	Name   *string
+	Class  *string
+	Crew   *int
+	Image  *string
+	Value  *float64
+	Status *string
+}
+
 type SpaceCraftFetchFilter struct {
 }

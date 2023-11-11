@@ -51,7 +51,7 @@ func (api *API) RegisterRoute() *fiber.App {
 
 	spaceCraft := appV1.Group("/space-craft")
 	spaceCraft.Post("/", api.CreateSpaceCraft)
-	spaceCraft.Put("/", api.EditSpaceCraft)
+	spaceCraft.Put("/:id", api.EditSpaceCraft)
 	spaceCraft.Get("/:id", api.GetSpaceCraft)
 	spaceCraft.Get("/", api.FetchSpaceCraft)
 	spaceCraft.Delete("/:id", api.DeleteSpaceCraft)

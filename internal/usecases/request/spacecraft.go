@@ -21,6 +21,12 @@ type SpaceShipArmament struct {
 }
 
 type SpaceShipEditRequest struct {
+	Name   string  `json:"name"`
+	Class  string  `json:"class"`
+	Crew   int     `json:"crew"`
+	Image  string  `json:"image"`
+	Value  float64 `json:"value"`
+	Status string  `json:"status"`
 }
 
 type SpaceShipFetchRequest struct {
@@ -50,4 +56,17 @@ func (c *SpaceShipCreateRequest) ToModel() *model.SpaceCraft {
 	}
 
 	return craft
+}
+
+func (c *SpaceShipEditRequest) ToModelUpdate() *model.SpaceCraftUpdate {
+	update := &model.SpaceCraftUpdate{
+		Name:   &c.Name,
+		Class:  &c.Class,
+		Crew:   &c.Crew,
+		Image:  &c.Image,
+		Value:  &c.Value,
+		Status: &c.Status,
+	}
+
+	return update
 }

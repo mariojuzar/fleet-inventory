@@ -7,7 +7,7 @@ import (
 
 type SpaceCraftRepository interface {
 	Insert(ctx context.Context, model *model.SpaceCraft) error
-	Update(ctx context.Context, model *model.SpaceCraft) error
+	Update(ctx context.Context, id int, model *model.SpaceCraftUpdate) error
 	Get(ctx context.Context, id int) (*model.SpaceCraft, error)
 	Delete(ctx context.Context, id int) error
 	Fetch(ctx context.Context, filter *model.SpaceCraftFetchFilter) ([]model.SpaceCraft, error)

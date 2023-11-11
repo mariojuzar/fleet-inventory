@@ -19,9 +19,21 @@ func (m *Module) Create(ctx context.Context, req *request.SpaceShipCreateRequest
 	return nil
 }
 
-func (m *Module) Edit(ctx context.Context, req *request.SpaceShipEditRequest) error {
-	//TODO implement me
-	panic("implement me")
+func (m *Module) Edit(ctx context.Context, id int, req *request.SpaceShipEditRequest) error {
+	existing, err := m.spaceCraftRepo.Get(ctx, id)
+	if err != nil {
+		return err
+	}
+
+	update := req.ToModelUpdate()
+
+	err = m.spaceCraftRepo.Update(ctx, existing.Id, update)
+	if err != nil {
+		log.Err(err).Msg("Failed to edit space ship")
+		return err
+	}
+
+	return nil
 }
 
 func (m *Module) Get(ctx context.Context, id int) (*response.SpaceCraftResponse, error) {
@@ -40,7 +52,12 @@ func (m *Module) Fetch(ctx context.Context, req *request.SpaceShipFetchRequest) 
 }
 
 func (m *Module) Delete(ctx context.Context, id int) error {
-	err := m.spaceCraftRepo.Delete(ctx, id)
+	existing, err := m.spaceCraftRepo.Get(ctx, id)
+	if err != nil {
+		return err
+	}
+
+	err = m.spaceCraftRepo.Delete(ctx, existing.Id)
 	if err != nil {
 		log.Err(err).Msg("Failed to delete space craft")
 		return err

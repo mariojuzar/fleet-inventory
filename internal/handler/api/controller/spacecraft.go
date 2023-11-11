@@ -36,17 +36,24 @@ func (api *API) CreateSpaceCraft(ctx *fiber.Ctx) error {
 // @Description	EditSpaceCraft
 // @Tags		space-craft
 // @Accept		json
+// @Param 		id		 path 		string 	true	"space-craft id"
 // @Param		space-craft		body		request.SpaceShipEditRequest	true	"Edit payload"
 // @Produce		json
 // @Success		200	{object}	JsonResponse[bool]{}
-// @Router		/v1/space-craft	[put]
+// @Router		/v1/space-craft/{id}	[put]
 func (api *API) EditSpaceCraft(ctx *fiber.Ctx) error {
-	req := &request.SpaceShipEditRequest{}
-	err := json.Unmarshal(ctx.Body(), req)
+	idParam := ctx.Params("id")
+	id, err := strconv.Atoi(idParam)
 	if err != nil {
 		return customErrorResponse(ctx, err)
 	}
-	err = api.scUc.Edit(ctx.UserContext(), req)
+
+	req := &request.SpaceShipEditRequest{}
+	err = json.Unmarshal(ctx.Body(), req)
+	if err != nil {
+		return customErrorResponse(ctx, err)
+	}
+	err = api.scUc.Edit(ctx.UserContext(), id, req)
 	if err != nil {
 		return customErrorResponse(ctx, err)
 	}

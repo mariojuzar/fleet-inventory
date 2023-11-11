@@ -6,6 +6,7 @@ import (
 	"github.com/mariojuzar/fleet-inventory/internal/domain/repository"
 	"github.com/mariojuzar/fleet-inventory/internal/infrastructures/mysql"
 	"github.com/rs/zerolog/log"
+	"time"
 )
 
 type SpaceCraftRepository struct {
@@ -74,9 +75,62 @@ func (repo *SpaceCraftRepository) generateArmamentsInsertQuery(model *model.Spac
 	return query, args
 }
 
-func (repo *SpaceCraftRepository) Update(ctx context.Context, model *model.SpaceCraft) error {
-	//TODO implement me
-	panic("implement me")
+func (repo *SpaceCraftRepository) Update(ctx context.Context, id int, model *model.SpaceCraftUpdate) error {
+	tx, err := repo.DB.Conn.BeginTx(ctx, nil)
+	if err != nil {
+		return err
+	}
+
+	defer func() {
+		if err != nil {
+			tx.Rollback()
+		}
+	}()
+
+	var args []any
+
+	query := `UPDATE space_crafts SET updated_at = ? `
+	args = append(args, time.Now())
+
+	if model.Name != nil {
+		query += `, name = ?`
+		args = append(args, model.Name)
+	}
+
+	if model.Crew != nil {
+		query += `, crew = ?`
+		args = append(args, model.Crew)
+	}
+
+	if model.Class != nil {
+		query += `, class = ?`
+		args = append(args, model.Class)
+	}
+
+	if model.Status != nil {
+		query += `, status = ?`
+		args = append(args, model.Status)
+	}
+
+	if model.Value != nil {
+		query += `, value = ?`
+		args = append(args, model.Value)
+	}
+
+	if model.Image != nil {
+		query += `, image = ?`
+		args = append(args, model.Image)
+	}
+
+	query += " WHERE id = ? and is_deleted = false"
+	args = append(args, id)
+
+	_, err = tx.ExecContext(ctx, query, args...)
+	if err != nil {
+		return err
+	}
+
+	return tx.Commit()
 }
 
 func (repo *SpaceCraftRepository) Get(ctx context.Context, id int) (*model.SpaceCraft, error) {
@@ -106,9 +160,9 @@ func (repo *SpaceCraftRepository) Get(ctx context.Context, id int) (*model.Space
 }
 
 func (repo *SpaceCraftRepository) Delete(ctx context.Context, id int) error {
-	query := `UPDATE space_crafts SET is_deleted = true WHERE id = ?`
+	query := `UPDATE space_crafts SET is_deleted = true, updated_at = ? WHERE id = ? and is_deleted = false`
 
-	_, err := repo.DB.Conn.ExecContext(ctx, query, id)
+	_, err := repo.DB.Conn.ExecContext(ctx, query, time.Now(), id)
 	if err != nil {
 		log.Err(err).Msg("Failed to soft delete space craft")
 		return err

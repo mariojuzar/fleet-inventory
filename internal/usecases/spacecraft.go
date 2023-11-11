@@ -8,7 +8,7 @@ import (
 
 type SpaceCraftUseCases interface {
 	Create(ctx context.Context, req *request.SpaceShipCreateRequest) error
-	Edit(ctx context.Context, req *request.SpaceShipEditRequest) error
+	Edit(ctx context.Context, id int, req *request.SpaceShipEditRequest) error
 	Get(ctx context.Context, id int) (*response.SpaceCraftResponse, error)
 	Fetch(ctx context.Context, req *request.SpaceShipFetchRequest) ([]response.SpaceCraftFetchResponse, error)
 	Delete(ctx context.Context, id int) error
