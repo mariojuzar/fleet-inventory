@@ -1,0 +1,277 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Imperial Fleet Inventory Management System Service.",
+        "title": "Imperial Fleet Inventory",
+        "contact": {},
+        "version": "1.0.0"
+    },
+    "basePath": "/",
+    "paths": {
+        "/ping": {
+            "get": {
+                "description": "HealthCheck",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "health-check"
+                ],
+                "summary": "HealthCheck",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controller.JsonResponse-bool"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/space-craft": {
+            "get": {
+                "description": "FetchSpaceCraft",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "space-craft"
+                ],
+                "summary": "FetchSpaceCraft",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "space-craft name",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "space-craft status",
+                        "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "space-craft class",
+                        "name": "class",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controller.JsonResponse-bool"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "EditSpaceCraft",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "space-craft"
+                ],
+                "summary": "EditSpaceCraft",
+                "parameters": [
+                    {
+                        "description": "Edit payload",
+                        "name": "space-craft",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.SpaceShipEditRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controller.JsonResponse-bool"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "CreateSpaceCraft",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "space-craft"
+                ],
+                "summary": "CreateSpaceCraft",
+                "parameters": [
+                    {
+                        "description": "Create payload",
+                        "name": "space-craft",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.SpaceShipCreateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controller.JsonResponse-bool"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/space-craft/{id}": {
+            "get": {
+                "description": "GetSpaceCraft",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "space-craft"
+                ],
+                "summary": "GetSpaceCraft",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "space-craft id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controller.JsonResponse-bool"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "DeleteSpaceCraft",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "space-craft"
+                ],
+                "summary": "DeleteSpaceCraft",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "space-craft id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controller.JsonResponse-bool"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "controller.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error_code": {
+                    "type": "integer"
+                },
+                "error_message": {
+                    "type": "string"
+                }
+            }
+        },
+        "controller.JsonResponse-bool": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "type": "boolean"
+                },
+                "error": {
+                    "$ref": "#/definitions/controller.ErrorResponse"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.SpaceShipArmament": {
+            "type": "object",
+            "properties": {
+                "armament_id": {
+                    "type": "integer"
+                },
+                "quantity": {
+                    "type": "integer"
+                }
+            }
+        },
+        "request.SpaceShipCreateRequest": {
+            "type": "object",
+            "properties": {
+                "armaments": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/request.SpaceShipArmament"
+                    }
+                },
+                "class": {
+                    "type": "string"
+                },
+                "crew": {
+                    "type": "integer"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "number"
+                }
+            }
+        },
+        "request.SpaceShipEditRequest": {
+            "type": "object"
+        }
+    }
+}

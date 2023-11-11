@@ -1,0 +1,181 @@
+basePath: /
+definitions:
+  controller.ErrorResponse:
+    properties:
+      error_code:
+        type: integer
+      error_message:
+        type: string
+    type: object
+  controller.JsonResponse-bool:
+    properties:
+      code:
+        type: integer
+      data:
+        type: boolean
+      error:
+        $ref: '#/definitions/controller.ErrorResponse'
+      message:
+        type: string
+    type: object
+  request.SpaceShipArmament:
+    properties:
+      armament_id:
+        type: integer
+      quantity:
+        type: integer
+    type: object
+  request.SpaceShipCreateRequest:
+    properties:
+      armaments:
+        items:
+          $ref: '#/definitions/request.SpaceShipArmament'
+        type: array
+      class:
+        type: string
+      crew:
+        type: integer
+      image:
+        type: string
+      name:
+        type: string
+      status:
+        type: string
+      value:
+        type: number
+    type: object
+  request.SpaceShipEditRequest:
+    type: object
+info:
+  contact: {}
+  description: Imperial Fleet Inventory Management System Service.
+  title: Imperial Fleet Inventory
+  version: 1.0.0
+paths:
+  /ping:
+    get:
+      consumes:
+      - application/json
+      description: HealthCheck
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.JsonResponse-bool'
+      summary: HealthCheck
+      tags:
+      - health-check
+  /v1/space-craft:
+    get:
+      consumes:
+      - application/json
+      description: FetchSpaceCraft
+      parameters:
+      - description: space-craft name
+        in: query
+        name: name
+        type: string
+      - description: space-craft status
+        in: query
+        name: status
+        type: string
+      - description: space-craft class
+        in: query
+        name: class
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.JsonResponse-bool'
+      summary: FetchSpaceCraft
+      tags:
+      - space-craft
+    post:
+      consumes:
+      - application/json
+      description: CreateSpaceCraft
+      parameters:
+      - description: Create payload
+        in: body
+        name: space-craft
+        required: true
+        schema:
+          $ref: '#/definitions/request.SpaceShipCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.JsonResponse-bool'
+      summary: CreateSpaceCraft
+      tags:
+      - space-craft
+    put:
+      consumes:
+      - application/json
+      description: EditSpaceCraft
+      parameters:
+      - description: Edit payload
+        in: body
+        name: space-craft
+        required: true
+        schema:
+          $ref: '#/definitions/request.SpaceShipEditRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.JsonResponse-bool'
+      summary: EditSpaceCraft
+      tags:
+      - space-craft
+  /v1/space-craft/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: DeleteSpaceCraft
+      parameters:
+      - description: space-craft id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.JsonResponse-bool'
+      summary: DeleteSpaceCraft
+      tags:
+      - space-craft
+    get:
+      consumes:
+      - application/json
+      description: GetSpaceCraft
+      parameters:
+      - description: space-craft id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.JsonResponse-bool'
+      summary: GetSpaceCraft
+      tags:
+      - space-craft
+swagger: "2.0"
